@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta name="color-scheme" content="dark">
+		<title>Growth Studio — Jiri Nohejl, Economist</title>
+		<meta name="description" content="An interactive Solow growth model: explore investment, productivity, teaching samples, CSV data, and historical regimes.">
+		<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+		<link rel="stylesheet" href="assets/site.css">
+		<link rel="stylesheet" href="assets/growth/growth.css">
+		<script src="assets/site.js" defer></script>
+		<script src="assets/growth/growth-model.js" defer></script>
+		<script src="assets/growth/growth-chart.js" defer></script>
+		<script src="assets/growth/growth-samples.js" defer></script>
+		<script src="assets/growth/growth-csv.js" defer></script>
+		<script src="assets/growth/studio.js" defer></script>
+	</head>
+
+	<body>
+		<a href="#main" class="skip-link">Skip to content</a>
+		<div class="shell">
+
+			<header class="navigation">
+				<a class="brand" href="index.html" aria-label="Jiri Nohejl, Economist — home">JIRI NOHEJL<span>;</span> ECONOMIST<span>.</span></a>
+				<button class="nav-toggle" type="button" aria-expanded="true" aria-controls="main-navigation" hidden>Menu</button>
+				<nav class="nav-links" id="main-navigation" aria-label="Main navigation">
+					<a href="research.html">Research</a>
+					<a href="projects.html" aria-current="location">Projects</a>
+					<a href="media.html">Media</a>
+					<a href="teaching.html">Teaching</a>
+					<a href="leadership.html">Leadership</a>
+					<a class="cv-link" href="cv.html">CV</a>
+				</nav>
+			</header>
+
+			<main id="main" tabindex="-1">
+				<div class="growth-studio">
+
+					<header class="page-head studio-intro">
+						<div class="eyebrow">
+							Teaching laboratory · The Solow model
+						</div>
+						<h1>Growth Studio<span>.</span></h1>
+						<p class="intro">Use the Solow model to explore how investment and productivity affect output per worker. Choose an illustrative dataset or upload your own, then compare paths under different assumptions.</p>
+						<nav class="page-jumps" aria-label="On this page">
+							<a href="projects.html#growth">← Back to the project</a>
+							<a href="#model-notes">Model &amp; data notes ↓</a>
+						</nav>
+					</header>
+
+					<section class="studio-workspace" aria-label="Interactive growth model">
+						<div class="studio-toolbar">
+							<div class="dataset-picker">
+								<label class="small-label" for="country">
+									Explore a dataset
+								</label>
+								<select id="country"></select>
+							</div>
+							<div class="studio-actions">
+								<label class="growth-button upload-label" for="upload">
+									Upload CSV
+									<span aria-hidden="true">↑</span>
+									<input id="upload" type="file" accept=".csv,text/csv">
+								</label>
+								<button class="growth-button" id="reset" type="button">Reset model <span aria-hidden="true">↺</span></button>
+							</div>
+						</div>
+						<div class="studio-layout">
+							<aside class="studio-panel studio-controls" aria-labelledby="controls-title">
+								<div class="small-label">
+									01 / Assumptions
+								</div>
+								<h2 id="controls-title">Shape the model</h2>
+								<label for="regime" class="regime-label">
+									Historical regime
+								</label>
+								<select id="regime"></select>
+								<div class="studio-actions">
+									<button id="add-break" class="growth-button" type="button">Add break +</button>
+									<button id="remove-break" class="growth-button" type="button">Remove break</button>
+								</div>
+								<form id="break-form" hidden>
+									<label for="break-year">
+										First year of the new regime
+									</label>
+									<input id="break-year" type="number" step="1" required>
+									<div class="studio-actions">
+										<button class="growth-button primary" type="submit">Add regime</button>
+										<button class="growth-button" type="button" id="cancel-break">Cancel</button>
+									</div>
+								</form>
+								<div class="growth-controls" id="parameters">
+								</div>
+								<div class="studio-actions">
+									<button class="growth-button" id="estimate" type="button">Estimate from data</button>
+									<button class="growth-button primary" id="fit" type="button">Fit TFP growth</button>
+								</div>
+								<p class="growth-note">Estimation uses averages within each regime and the first and last observations to estimate total factor productivity (TFP) growth. Fitting adjusts only TFP growth to improve the match to the data.</p>
+								<details class="studio-details">
+									<summary>Production &amp; initial state</summary>
+									<label for="alpha">
+										Capital share α
+										<output id="alpha-value" for="alpha"></output>
+									</label>
+									<input id="alpha" type="range" min=".2" max=".5" step=".005" value=".333">
+									<label for="initial-k">
+										Initial capital per worker ($1,000s)
+									</label>
+									<input id="initial-k" type="number" min=".001" step="any">
+								</details>
+							</aside>
+
+							<section class="studio-panel studio-chart-panel" aria-labelledby="chart-title">
+								<div class="plot-heading">
+									<div>
+										<div class="small-label">
+											02 / Economic outcomes
+										</div>
+										<h2 id="chart-title">Output per worker</h2>
+									</div>
+									<button class="growth-button" id="keep-baseline" type="button">Save comparison path <span aria-hidden="true">+</span></button>
+								</div>
+								<p class="growth-note dataset-caption" id="data-caption"></p>
+								<div id="studio-chart">
+								</div>
+								<p class="studio-status" id="status" role="status" aria-live="polite"></p>
+								<button class="growth-button" id="clear-baseline" type="button" hidden>Clear comparison</button>
+								<div class="growth-insight">
+									<div class="small-label">
+										A question to explore
+									</div>
+									<p>Hold productivity growth fixed and raise investment. Does output grow faster forever, or move toward a higher path?</p>
+								</div>
+								<noscript><p class="growth-note">Enable JavaScript to load the model, charts, and controls.</p></noscript>
+							</section>
+						</div>
+					</section>
+
+					<section class="teaching-strip" aria-labelledby="teaching-question">
+						<div class="small-label">
+							Predict → Experiment → Explain
+						</div>
+						<h2 id="teaching-question">A different way into growth theory.</h2>
+						<p>Explore convergence, distinguish level effects from growth effects, and ask what a fitted path leaves unexplained. Add a historical break when you can defend the economic story.</p>
+					</section>
+
+					<section class="studio-notes" id="model-notes" aria-labelledby="notes-title">
+						<h2 id="notes-title">Model &amp; data notes</h2>
+						<details class="studio-details">
+							<summary>How the model works</summary>
+							<p>Output per worker is <code>y = A k^α</code>, where <code>A</code> is total factor productivity, <code>k</code> is capital per worker, and <code>α</code> is the capital share. Each year, capital changes according to <code>k(next) = [(1 − δ)k + sy] / (1 + n)</code>, and productivity grows according to <code>A(next) = A(1 + gA)</code>. Each regime’s parameters govern the transition from that year to the next.</p>
+							<p>With fixed parameters, output per worker grows at <code>(1 + gA)^(1 / (1 − α)) − 1</code> on the balanced growth path. The displayed paths depend on the assumptions you choose. TFP fitting adjusts productivity growth by regime to reduce the root mean square error in log output over the selected sample.</p>
+						</details>
+						<details class="studio-details" id="data-format">
+							<summary>Upload format &amp; teaching samples</summary>
+							<p>Upload a CSV with <code>year,y,s,n,delta,k</code>. Include at least five consecutive years, with one row per year. Enter positive output per worker (<code>y</code>) and capital per worker (<code>k</code>) in thousands of constant dollars on the same price basis. Enter the investment rate (<code>s</code>), labor force growth (<code>n</code>), and depreciation (<code>delta</code>) as fractions such as <code>0.25</code> for 25%.</p>
+							<p>The bundled country series are illustrative teaching samples with unverified sources. Uploaded data stays in your browser and starts with one regime. Resetting or choosing a dataset clears your saved comparison and model changes.</p>
+							<button id="download-sample" class="growth-button" type="button">Download current input CSV <span aria-hidden="true">↓</span></button>
+						</details>
+					</section>
+				</div>
+			</main>
+
+			<footer class="footer">
+				<div>
+					<p class="footer-name">Jiri Nohejl</p>
+					<p>Economics · George Mason University · Arlington, VA</p>
+				</div>
+				<nav class="footer-links" aria-label="Contact and profiles">
+					<a href="mailto:jnohejl@gmu.edu">Email ↗</a>
+					<a href="https://github.com/JiriNohejl" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+					<a href="https://www.linkedin.com/in/jirinohejl/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+					<a href="https://economics.gmu.edu/people/jnohejl" target="_blank" rel="noopener noreferrer">GMU profile ↗</a>
+				</nav>
+			</footer>
+		</div>
+	</body>
+</html>
